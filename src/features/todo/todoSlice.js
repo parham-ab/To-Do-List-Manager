@@ -21,7 +21,7 @@ const todoSlice = createSlice({
           JSON.stringify(state.todoList)
         );
       },
-      prepare: (title, content, done) => {
+      prepare: (title, content, done, category) => {
         let options = {
           hour12: false,
           hourCycle: "h23",
@@ -35,8 +35,10 @@ const todoSlice = createSlice({
           payload: {
             id: nanoid(),
             title,
-            timeCreated: new Date().toLocaleString("en-US", options),
+            content,
             done,
+            category,
+            timeCreated: new Date().toLocaleString("en-US", options),
           },
         };
       },
@@ -61,12 +63,13 @@ const todoSlice = createSlice({
       );
     },
     editTodo: (state, action) => {
-      const { id, title, content, done } = action.payload;
+      const { id, title, content, done, category } = action.payload;
       const currentTodo = state.todoList.find((item) => item.id === id);
       if (currentTodo) {
         currentTodo.title = title;
         currentTodo.content = content;
         currentTodo.done = done;
+        currentTodo.category = category;
       }
       localStorage.setItem(
         "todo-management-app",

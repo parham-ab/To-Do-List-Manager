@@ -4,7 +4,7 @@ import themeReducer from "features/utils/themeSlice";
 
 export const store = configureStore({
   reducer: {
-    todo: todoReducer,
-    theme: themeReducer,
+    todoReducer,
+    themeReducer,
   },
 });
