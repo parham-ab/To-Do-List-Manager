@@ -2,3 +2,16 @@
 body {
   font-family: "Nunito", sans-serif;
 }
+input[type="checkbox"] {
+  appearance: none;
+  border: 1px solid #278695;
+  cursor: pointer;
+  height: 20px;
+  transition: all 0.1s;
+  width: 20px !important;
+  border-radius: 5px;
+  &:checked {
+    background-color: #278695;
+    width: 20px !important;
+  }
+}

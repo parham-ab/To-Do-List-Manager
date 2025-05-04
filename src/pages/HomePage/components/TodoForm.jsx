@@ -1,72 +1,84 @@
 import { addTodo } from "features/todo/todoSlice";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import CustomInput from "components/common/CustomInput";
+import {
+  addTodoDefaultValues,
+  addTodoValidationSchema,
+} from "../validation/addTodoValidations";
 
 const TodoForm = () => {
+  const { theme } = useSelector((state) => state?.themeReducer);
   const dispatch = useDispatch();
+  const { control, handleSubmit, reset } = useForm({
+    resolver: yupResolver(addTodoValidationSchema),
+    defaultValues: addTodoDefaultValues,
+  });
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [done, setDone] = useState(false);
-  const [category, setCategory] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!title.trim()) return;
-
-    dispatch(addTodo(title, content, done, category));
-
-    // Optionally reset the form
-    setTitle("");
-    setContent("");
-    setDone(false);
-    setCategory("");
+  const onSubmit = (data) => {
+    if (!data.title.trim()) return;
+    dispatch(addTodo(data.title, data.content, data.done, data.category));
+    reset();
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="p-4 border rounded shadow max-w-md mx-auto"
+      onSubmit={handleSubmit(onSubmit)}
+      className={`p-4 border ${
+        theme === "dark" ? "border-white" : ""
+      } rounded shadow-md max-w-md mx-auto`}
     >
-      <h2 className="text-xl font-semibold mb-4">Add Todo</h2>
+      <h2
+        className={`text-xl font-semibold mb-4 ${
+          theme === "dark" ? "text-white" : "text-black"
+        }`}
+      >
+        Add Todo
+      </h2>
 
       <div className="mb-3">
-        <label className="block font-medium mb-1">Title</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border rounded px-2 py-1"
-          required
+        <CustomInput
+          control={control}
+          name="title"
+          label="Title"
+          placeholder="Enter todo title"
+          className="border-[#4B4B4B]"
+          rules={{ required: "Title is required" }}
         />
       </div>
 
       <div className="mb-3">
-        <label className="block font-medium mb-1">Content</label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full border rounded px-2 py-1"
+        <CustomInput
+          control={control}
+          name="content"
+          label="Content"
+          type="textarea"
+          placeholder="Enter todo content"
+          className="border-[#4B4B4B]"
         />
       </div>
 
       <div className="mb-3">
-        <label className="block font-medium mb-1">Category</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full border rounded px-2 py-1"
+        <CustomInput
+          control={control}
+          name="category"
+          label="Category"
+          placeholder="Enter category"
+          className="border-[#4B4B4B]"
         />
       </div>
 
       <div className="mb-3">
-        <label className="inline-flex items-center">
+        <label
+          className={`inline-flex items-center cursor-pointer select-none ${
+            theme === "dark" ? "text-white" : "text-black"
+          }`}
+        >
           <input
             type="checkbox"
-            checked={done}
-            onChange={(e) => setDone(e.target.checked)}
+            {...control.register("done")}
             className="mr-2"
           />
           Done
@@ -75,7 +87,7 @@ const TodoForm = () => {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="bg-[#278695] text-white px-4 py-2 rounded hover:bg-[#569aa5] cursor-pointer select-none w-full transition-all"
       >
         Add Todo
       </button>
