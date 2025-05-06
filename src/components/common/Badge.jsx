@@ -13,7 +13,6 @@ const Badge = ({ children, isDate = false, category }) => {
     default: { bg: "bg-gray-200", icon: null },
   };
   const { bg, icon } = badgeConfig[category] || badgeConfig.default;
-
   return (
     <div
       className={`text-xs flex items-center gap-1 rounded-full ${bg} p-1 cursor-default select-none`}

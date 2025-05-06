@@ -1,5 +1,5 @@
 import Badge from "components/common/Badge";
-import { deleteTodo, editTodo } from "features/todo/todoSlice";
+import { deleteTodo } from "features/todo/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { HiPencil } from "react-icons/hi";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -17,16 +17,14 @@ const TodoList = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const handleDelete = (id) => {
-    dispatch(deleteTodo({ id }));
-  };
+  const [currentTodo, setCurrentTodo] = useState(null);
 
+  const handleDelete = (id) => dispatch(deleteTodo({ id }));
   const handleEdit = (todo) => {
     setIsEditing(true);
+    setCurrentTodo(todo);
     setIsPopupOpen(true);
-    dispatch(editTodo(todo));
   };
-
   const filteredList = todoList
     ?.filter((todo) =>
       filterCategory === "all"
@@ -38,11 +36,14 @@ const TodoList = () => {
       const timeB = new Date(b.timeCreated).getTime();
       return sortAsc ? timeA - timeB : timeB - timeA;
     });
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen rounded-md">
       <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <TodoForm isEditing={isEditing} setIsPopupOpen={setIsPopupOpen} />
+        <TodoForm
+          isEditing={isEditing}
+          setIsPopupOpen={setIsPopupOpen}
+          initialValues={currentTodo}
+        />
       </Popup>
       <div className="flex items-start justify-between">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -57,8 +58,6 @@ const TodoList = () => {
           size={30}
         />
       </div>
-
-      {/* Filter + Sort Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
           <label className="text-gray-700 font-medium">Category:</label>
@@ -76,7 +75,6 @@ const TodoList = () => {
             ))}
           </select>
         </div>
-
         <button
           onClick={() => setSortAsc((prev) => !prev)}
           className="flex items-center justify-between bg-[#278695] text-white px-2 py-1 rounded hover:bg-[#569aa5] cursor-pointer select-none w-32 transition-all"
@@ -89,8 +87,6 @@ const TodoList = () => {
           {sortAsc ? "Oldest First" : "Newest First"}
         </button>
       </div>
-
-      {/* Todo Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredList?.map((todo) => (
           <div
@@ -112,14 +108,9 @@ const TodoList = () => {
                 />
               </div>
             </div>
-
             <p className="text-gray-600 mb-2 flex-grow">{todo?.content}</p>
-
             <div className="flex flex-wrap gap-2 mt-auto">
-              <Badge category={todo?.category}>
-                {todo?.category.charAt(0).toUpperCase() +
-                  todo?.category.slice(1)}
-              </Badge>
+              <Badge category={todo?.category}>{todo?.category}</Badge>
               <Badge isDate>{todo?.timeCreated}</Badge>
               <span
                 className={`text-sm font-medium px-2 py-1 rounded-full ${
@@ -137,5 +128,4 @@ const TodoList = () => {
     </div>
   );
 };
-
 export default TodoList;

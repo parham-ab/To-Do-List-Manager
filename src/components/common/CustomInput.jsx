@@ -19,13 +19,10 @@ const CustomInput = ({
     name,
     control,
   });
-
   const [charCount, setCharCount] = useState(field.value?.length || 0);
-
   const borderColor = error ? "border-red-500" : "border-[#4B4B4B]";
-
   return (
-    <div className="mb-3">
+    <div className="mb-2">
       {label && (
         <label htmlFor={name} className={`cursor-pointer`}>
           {label}
@@ -61,7 +58,7 @@ const CustomInput = ({
             rows={rows}
           />
           <p
-            className={`text-sm mt-1 text-right ${
+            className={`text-sm text-right ${
               charCount >= maxLength ? "text-red-500" : "text-gray-500"
             }`}
           >
@@ -69,7 +66,7 @@ const CustomInput = ({
           </p>
         </>
       )}
-      {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
+      {error && <p className="text-red-500 text-sm">{error.message}</p>}
     </div>
   );
 };
