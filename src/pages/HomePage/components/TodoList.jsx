@@ -18,7 +18,7 @@ const TodoList = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const handleDelete = (id) => {
-    dispatch(deleteTodo(id));
+    dispatch(deleteTodo({ id }));
   };
 
   const handleEdit = (todo) => {
