@@ -6,6 +6,15 @@ const addTodoDefaultValues = {
   done: false,
 };
 
+const categoryOptions = [
+  { value: "", label: "Select a category" },
+  { value: "sport", label: "Sport" },
+  { value: "work", label: "Work" },
+  { value: "personal", label: "Personal" },
+  { value: "study", label: "Study" },
+  { value: "shop", label: "Shop" },
+];
+
 const addTodoValidationSchema = Yup.object({
   title: Yup.string()
     .required("Title is required!")
@@ -19,4 +28,4 @@ const addTodoValidationSchema = Yup.object({
     .notRequired(),
 });
 
-export { addTodoValidationSchema, addTodoDefaultValues };
+export { addTodoValidationSchema, addTodoDefaultValues, categoryOptions };

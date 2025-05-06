@@ -1,5 +1,5 @@
 import { useController } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const CustomInput = ({
   control,
@@ -10,6 +10,7 @@ const CustomInput = ({
   heightVal = "37px",
   placeholder,
   rows = 4,
+  maxLength = 120,
 }) => {
   const {
     field,
@@ -19,18 +20,14 @@ const CustomInput = ({
     control,
   });
 
+  const [charCount, setCharCount] = useState(field.value?.length || 0);
+
   const borderColor = error ? "border-red-500" : "border-[#4B4B4B]";
-  const { theme } = useSelector((state) => state?.themeReducer);
 
   return (
-    <>
+    <div className="mb-3">
       {label && (
-        <label
-          htmlFor={name}
-          className={`cursor-pointer ${
-            theme === "dark" ? "text-white" : "text-black"
-          }`}
-        >
+        <label htmlFor={name} className={`cursor-pointer`}>
           {label}
         </label>
       )}
@@ -40,41 +37,40 @@ const CustomInput = ({
           type={type}
           placeholder={placeholder}
           {...field}
-          className={`
-          w-full px-3 pr-10 rounded-md bg-transparent text-[16px] border
+          className={`w-full px-3 pr-10 rounded-md text-[16px] border placeholder-gray-500
           ${borderColor} outline-none transition-all duration-200
           ${className}
-          ${
-            theme === "dark"
-              ? "bg-[#090B1F] placeholder-gray-400 text-white"
-              : "bg-[#c9c9c9] placeholder-gray-500"
-          }
-            `}
-          style={{
-            height: heightVal,
-          }}
+         `}
+          style={{ height: heightVal }}
         />
       ) : (
-        <textarea
-          id={name}
-          type={type}
-          placeholder={placeholder}
-          {...field}
-          className={`
-              w-full px-3 pr-10 rounded-md bg-transparent text-[16px] border
+        <>
+          <textarea
+            id={name}
+            placeholder={placeholder}
+            {...field}
+            maxLength={maxLength}
+            onChange={(e) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            }}
+            className={`w-full px-3 pr-10 rounded-md text-[16px] border placeholder-gray-500
               ${borderColor} outline-none transition-all duration-200
               ${className}
-              ${
-                theme === "dark"
-                  ? "bg-[#090B1F] placeholder-gray-400 text-white"
-                  : "bg-[#c9c9c9] placeholder-gray-500"
-              }
-                `}
-          rows={rows}
-        />
+             `}
+            rows={rows}
+          />
+          <p
+            className={`text-sm mt-1 text-right ${
+              charCount >= maxLength ? "text-red-500" : "text-gray-500"
+            }`}
+          >
+            {charCount}/{maxLength}
+          </p>
+        </>
       )}
       {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
-    </>
+    </div>
   );
 };
 
