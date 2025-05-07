@@ -11,7 +11,7 @@ import TodoForm from "./TodoForm";
 import Popup from "components/Popup";
 
 const TodoList = () => {
-  const { todoList } = useSelector((state) => state).todoReducer;
+  const todoList = useSelector((state) => state.todoReducer.todoList);
   const dispatch = useDispatch();
   const [filterCategory, setFilterCategory] = useState("all");
   const [sortAsc, setSortAsc] = useState(true);
