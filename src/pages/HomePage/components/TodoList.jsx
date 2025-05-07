@@ -87,44 +87,52 @@ const TodoList = () => {
           {sortAsc ? "Oldest First" : "Newest First"}
         </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredList?.map((todo) => (
-          <div
-            key={todo?.id}
-            className="bg-white p-3 rounded-2xl shadow hover:shadow-lg transition-shadow relative min-h-60 flex flex-col"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-lg font-bold text-gray-800">{todo?.title}</h3>
-              <div className="flex gap-2">
-                <HiPencil
-                  size={20}
-                  className="text-blue-500 hover:text-blue-700 cursor-pointer transition-all"
-                  onClick={() => handleEdit(todo)}
-                />
-                <FaRegTrashAlt
-                  size={18}
-                  className="text-red-500 hover:text-red-700 cursor-pointer transition-all"
-                  onClick={() => handleDelete(todo?.id)}
-                />
+      {filteredList?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredList?.map((todo) => (
+            <div
+              key={todo?.id}
+              className="bg-white p-3 rounded-2xl shadow hover:shadow-lg transition-shadow relative min-h-60 flex flex-col"
+            >
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-lg font-bold text-gray-800">
+                  {todo?.title}
+                </h3>
+                <div className="flex gap-2">
+                  <HiPencil
+                    size={20}
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer transition-all"
+                    onClick={() => handleEdit(todo)}
+                  />
+                  <FaRegTrashAlt
+                    size={18}
+                    className="text-red-500 hover:text-red-700 cursor-pointer transition-all"
+                    onClick={() => handleDelete(todo?.id)}
+                  />
+                </div>
+              </div>
+              <p className="text-gray-600 mb-2 flex-grow">{todo?.content}</p>
+              <div className="flex flex-wrap gap-2 mt-auto">
+                <Badge category={todo?.category}>{todo?.category}</Badge>
+                <Badge isDate>{todo?.timeCreated}</Badge>
+                <span
+                  className={`text-sm font-medium px-2 py-1 rounded-full ${
+                    todo?.done
+                      ? "bg-green-100 text-green-600"
+                      : "bg-orange-100 text-orange-500"
+                  }`}
+                >
+                  {todo?.done ? "Done" : "Pending"}
+                </span>
               </div>
             </div>
-            <p className="text-gray-600 mb-2 flex-grow">{todo?.content}</p>
-            <div className="flex flex-wrap gap-2 mt-auto">
-              <Badge category={todo?.category}>{todo?.category}</Badge>
-              <Badge isDate>{todo?.timeCreated}</Badge>
-              <span
-                className={`text-sm font-medium px-2 py-1 rounded-full ${
-                  todo?.done
-                    ? "bg-green-100 text-green-600"
-                    : "bg-orange-100 text-orange-500"
-                }`}
-              >
-                {todo?.done ? "Done" : "Pending"}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex justify-center h-screen items-center">
+          <p className="text-2xl font-bold">Empty Todo List!</p>
+        </div>
+      )}
     </div>
   );
 };
