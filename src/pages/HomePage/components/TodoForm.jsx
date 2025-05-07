@@ -86,7 +86,6 @@ const TodoForm = ({ setIsPopupOpen, isEditing, initialValues }) => {
             errors.category ? "border-red-500" : ""
           }`}
         >
-          <option value="">Select a category</option>
           {categoryOptions?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
